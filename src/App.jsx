@@ -1,21 +1,48 @@
-// Full implementation of the Student Registration System in React with pre-filled data
-
-import React, { useState } from "react";
-import "./App.css"; // Add styling as needed
+import React, { useState, useEffect } from "react";
+import "./App.css";
 
 const App = () => {
-  const [courseTypes, setCourseTypes] = useState(["Individual", "Group", "Special"]);
-  const [courses, setCourses] = useState(["Hindi", "English", "Urdu"]);
-  const [offerings, setOfferings] = useState([
-    { course: "Hindi", type: "Individual" },
-    { course: "English", type: "Group" },
-    { course: "Urdu", type: "Special" },
-  ]);
-  const [registrations, setRegistrations] = useState([  ]);
+  // Load data from localStorage or initialize default values
+  const [courseTypes, setCourseTypes] = useState(() => {
+    return JSON.parse(localStorage.getItem("courseTypes")) || ["Individual", "Group", "Special"];
+  });
+  const [courses, setCourses] = useState(() => {
+    return JSON.parse(localStorage.getItem("courses")) || ["Hindi", "English", "Urdu"];
+  });
+  const [offerings, setOfferings] = useState(() => {
+    return JSON.parse(localStorage.getItem("offerings")) || [
+      { course: "Hindi", type: "Individual" },
+      { course: "English", type: "Group" },
+      { course: "Urdu", type: "Special" },
+    ];
+  });
+  const [registrations, setRegistrations] = useState(() => {
+    return JSON.parse(localStorage.getItem("registrations")) || [];
+  });
 
   const [selectedCourseType, setSelectedCourseType] = useState(null);
   const [selectedCourse, setSelectedCourse] = useState(null);
   const [filterType, setFilterType] = useState("");
+
+  // Effect to sync courseTypes with localStorage
+  useEffect(() => {
+    localStorage.setItem("courseTypes", JSON.stringify(courseTypes));
+  }, [courseTypes]);
+
+  // Effect to sync courses with localStorage
+  useEffect(() => {
+    localStorage.setItem("courses", JSON.stringify(courses));
+  }, [courses]);
+
+  // Effect to sync offerings with localStorage
+  useEffect(() => {
+    localStorage.setItem("offerings", JSON.stringify(offerings));
+  }, [offerings]);
+
+  // Effect to sync registrations with localStorage
+  useEffect(() => {
+    localStorage.setItem("registrations", JSON.stringify(registrations));
+  }, [registrations]);
 
   const addCourseType = (name) => {
     if (!name || courseTypes.includes(name)) return;
@@ -78,6 +105,7 @@ const App = () => {
     <div className="app">
       <h1>Student Registration System</h1>
 
+      {/* Manage Course Types */}
       <section>
         <h2>Manage Course Types</h2>
         <input
@@ -105,6 +133,7 @@ const App = () => {
         </ul>
       </section>
 
+      {/* Manage Courses */}
       <section>
         <h2>Manage Courses</h2>
         <input
@@ -132,6 +161,7 @@ const App = () => {
         </ul>
       </section>
 
+      {/* Manage Course Offerings */}
       <section>
         <h2>Manage Course Offerings</h2>
         <select onChange={(e) => setSelectedCourse(e.target.value)}>
@@ -174,6 +204,7 @@ const App = () => {
         </ul>
       </section>
 
+      {/* Student Registrations */}
       <section>
         <h2>Student Registrations</h2>
         <input
@@ -207,6 +238,7 @@ const App = () => {
         </ul>
       </section>
 
+      {/* Filter Offerings */}
       <section>
         <h2>Filter Offerings</h2>
         <select onChange={(e) => filterOfferings(e.target.value)}>
